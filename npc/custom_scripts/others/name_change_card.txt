@@ -1,0 +1,15 @@
+// Name Change Card
+// ================================================
+
+-	script	RenameCheck	-1,{
+OnPCLoginEvent:
+	if(CharRename == 0 && Rename_Check == 0) end;
+	if(CharRename == 1 && Rename_Check == 1) end;
+	if(CharRename == 0 && Rename_Check == 1){
+		Rename_Done = 1;
+		Rename_Check = 0;
+		end;
+	}
+}
+
+// =================================================
