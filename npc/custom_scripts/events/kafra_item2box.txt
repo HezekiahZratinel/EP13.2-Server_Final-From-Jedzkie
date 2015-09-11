@@ -1,0 +1,74 @@
+// Event Script
+prontera,139,96,5	script	Kafra Agent#item2box	4_F_KAFRA5,{
+	cutin "kafra_05",2;
+	disable_items;
+	mes .name$;
+	mes "Hi "+strcharinfo(0)+"!";
+	mes "Our main office in Aldebaran sent me here to provide special service.";
+	next;
+	if(select("I have no time for that.:What kind of service?") == 1){
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes .name$;
+	mes "I can convert again to box your non-tradable equipments or items that you've opened from its own box.";
+	mes "Isn't it great, eh?";
+	mes "But in every items that you will convert to boxes, you must pay according to its prices.";
+	mes "You can check the prices of convertion in our website.";
+	next;
+	if(select("Nevermind.:Cool... Let me try it!") == 1){
+		close2;
+		cutin "",255;
+		end;
+	}
+	mes .name$;
+	mes "^ff0000You can do conversion 1 item at a time.^000000";
+	mes "Please select the items on the category that you want to convert.";
+	next;
+	
+	for(.@i = @k = 0; .@i < getarraysize(.items); .@i++) {
+		if(countitem(.items[.@i]) >= .item_count[.@i]){
+			.@menu$ += getitemname(.items[.@i])+":";
+			.@index[.@k++] = .@i;
+		}
+	}
+	.@opt = select(.@menu$)-1;
+		if (.@opt == .@k){
+			close2;
+			cutin "",255;
+			end;
+		}
+		.@itemid = .items[.@index[.@opt]];
+		.@i = .@index[.@opt];
+	if (Zeny < .price[.@i]) {
+		mes .name$;
+		mes "You do not have enough zeny.";
+		close2;
+		cutin "",255;
+		end;
+	}
+	Zeny -= .price[.@i];
+	delitem .items[.@i],.item_count[.@i];
+	getitem .box[.@i],.box_count[.@i];
+	mes .name$;
+	mes "Thank you for using my service.";
+	close2;
+	cutin "",255;
+	end;
+	
+OnInit:
+	.name$ = "[ ^ffa500Kafra Agent^000000 ]";
+	setarray .items[0],5377,5376,607,12202,12203,12204,12205,12206,12207;
+	setarray .item_count[0],1,1,10,10,10,10,10,10,10;
+	setarray .box[0],13921,13920,14232,12903,12904,12905,12906,12907;
+	setarray .box_count[0],1,1,1,1,1,1,1,1,1;
+	setarray .price[0],200000,200000,100000,100000,100000,100000,100000,100000,100000;
+	end;
+
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == strnpcinfo(4)){
+		showevent QTYPE_EVENT;
+		end;
+	}
+}

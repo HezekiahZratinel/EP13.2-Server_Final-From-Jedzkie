@@ -4624,9 +4624,9 @@ int pc_dropitem(struct map_session_data *sd,int n,int amount)
  *------------------------------------------*/
 int pc_takeitem(struct map_session_data *sd,struct flooritem_data *fitem)
 {
-	int flag=0;
+	int flag = 0;
 	int64 tick = timer->gettick();
-	struct party_data *p=NULL;
+	struct party_data *p = NULL;
 
 	nullpo_ret(sd);
 	nullpo_ret(fitem);
@@ -6510,8 +6510,8 @@ int pc_checkbaselevelup(struct map_session_data *sd) {
 	do {
 		sd->status.base_exp -= next;
 		//Kyoki pointed out that the max overcarry exp is the exp needed for the previous level -1. [Skotlex]
-		if(!battle_config.multi_level_up && sd->status.base_exp > next-1)
-			sd->status.base_exp = next-1;
+		if(!battle_config.multi_level_up && sd->status.base_exp > next - 1)
+			sd->status.base_exp = next - 1;
 
 		next = pc->gets_status_point(sd->status.base_level);
 		sd->status.base_level ++;

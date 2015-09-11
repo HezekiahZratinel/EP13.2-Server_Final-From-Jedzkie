@@ -6541,6 +6541,11 @@ ACMD(misceffect) {
  *------------------------------------------*/
 ACMD(mail)
 {
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return false;
+	}
+	
 	mail->openmail(sd);
 	return true;
 }

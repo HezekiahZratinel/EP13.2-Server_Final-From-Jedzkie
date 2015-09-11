@@ -152,6 +152,11 @@ void mail_getattachment(struct map_session_data* sd, int zeny, struct item* item
 int mail_openmail(struct map_session_data *sd)
 {
 	nullpo_ret(sd);
+	
+	if(!battle_config.feature_mail){
+		clif->message(sd->fd, msg_sd(sd, 27));
+		return true;
+	}
 
 	if (sd->state.storage_flag != STORAGE_FLAG_CLOSED || sd->state.vending || sd->state.buyingstore || sd->state.trading)
 		return 0;

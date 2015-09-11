@@ -9240,7 +9240,7 @@ void clif_parse_LoadEndAck(int fd,struct map_session_data *sd) {
 		}
 
 		if(sd->pd && sd->pd->pet.intimate > 900)
-			clif->pet_emotion(sd->pd,(sd->pd->pet.class_ - 100)*100 + 50 + pet->hungry_val(sd->pd));
+			clif->pet_emotion(sd->pd, (sd->pd->pet.class_ - 100) * 100 + 50 + pet->hungry_val(sd->pd));
 
 		if(homun_alive(sd->hd))
 			homun->init_timers(sd->hd);
@@ -10521,9 +10521,9 @@ void clif_parse_CreateChatRoom(int fd, struct map_session_data* sd)
 	if( npc->isnear(&sd->bl) ) {
 		// uncomment for more verbose message.
 		//char output[150];
-		//sprintf(output, msg_txt(862), battle_config.min_npc_vendchat_distance); // "You're too close to a NPC, you must be at least %d cells away from any NPC."
-		//clif_displaymessage(sd->fd, output);
-		clif->skill_fail(sd,1,USESKILL_FAIL_THERE_ARE_NPC_AROUND,0);
+		//srintf(output, msg_txt(862), battle_config.min_npc_vendchat_distance); // "You're too close to a NPC, you must be at least %d cells away from any NPC."
+		//clif->skill_fail(sd, 1, USESKILL_FAIL_THERE_ARE_NPC_AROUND, 0);
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(35));
 		return;
 	}
 
@@ -14288,13 +14288,17 @@ void clif_parse_Check(int fd, struct map_session_data *sd)
 ///     1 = failure
 void clif_Mail_setattachment(int fd, int index, uint8 flag)
 {
-	WFIFOHEAD(fd,packet_len(0x255));
-	WFIFOW(fd,0) = 0x255;
-	WFIFOW(fd,2) = index;
-	WFIFOB(fd,4) = flag;
-	WFIFOSET(fd,packet_len(0x255));
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
+	
+	WFIFOHEAD(fd, packet_len(0x255));
+	WFIFOW(fd, 0) = 0x255;
+	WFIFOW(fd, 2) = index;
+	WFIFOB(fd, 4) = flag;
+	WFIFOSET(fd, packet_len(0x255));
 }
-
 
 /// Notification about the result of retrieving a mail attachment (ZC_MAIL_REQ_GET_ITEM).
 /// 0245 <result>.B
@@ -14304,12 +14308,16 @@ void clif_Mail_setattachment(int fd, int index, uint8 flag)
 ///     2 = too many items
 void clif_Mail_getattachment(int fd, uint8 flag)
 {
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
+	
 	WFIFOHEAD(fd,packet_len(0x245));
-	WFIFOW(fd,0) = 0x245;
-	WFIFOB(fd,2) = flag;
-	WFIFOSET(fd,packet_len(0x245));
+	WFIFOW(fd, 0) = 0x245;
+	WFIFOB(fd, 2) = flag;
+	WFIFOSET(fd, packet_len(0x245));
 }
-
 
 /// Notification about the result of sending a mail (ZC_MAIL_REQ_SEND).
 /// 0249 <result>.B
@@ -14318,12 +14326,16 @@ void clif_Mail_getattachment(int fd, uint8 flag)
 ///     1 = recipient does not exist
 void clif_Mail_send(int fd, bool fail)
 {
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
+	
 	WFIFOHEAD(fd,packet_len(0x249));
-	WFIFOW(fd,0) = 0x249;
-	WFIFOB(fd,2) = fail;
-	WFIFOSET(fd,packet_len(0x249));
+	WFIFOW(fd, 0) = 0x249;
+	WFIFOB(fd, 2) = fail;
+	WFIFOSET(fd, packet_len(0x249));
 }
-
 
 /// Notification about the result of deleting a mail (ZC_ACK_MAIL_DELETE).
 /// 0257 <mail id>.L <result>.W
@@ -14332,13 +14344,17 @@ void clif_Mail_send(int fd, bool fail)
 ///     1 = failure
 void clif_Mail_delete(int fd, int mail_id, short fail)
 {
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
+	
 	WFIFOHEAD(fd, packet_len(0x257));
-	WFIFOW(fd,0) = 0x257;
-	WFIFOL(fd,2) = mail_id;
-	WFIFOW(fd,6) = fail;
+	WFIFOW(fd, 0) = 0x257;
+	WFIFOL(fd, 2) = mail_id;
+	WFIFOW(fd, 6) = fail;
 	WFIFOSET(fd, packet_len(0x257));
 }
-
 
 /// Notification about the result of returning a mail (ZC_ACK_MAIL_RETURN).
 /// 0274 <mail id>.L <result>.W
@@ -14347,26 +14363,34 @@ void clif_Mail_delete(int fd, int mail_id, short fail)
 ///     1 = failure
 void clif_Mail_return(int fd, int mail_id, short fail)
 {
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
+	
 	WFIFOHEAD(fd,packet_len(0x274));
-	WFIFOW(fd,0) = 0x274;
-	WFIFOL(fd,2) = mail_id;
-	WFIFOW(fd,6) = fail;
-	WFIFOSET(fd,packet_len(0x274));
+	WFIFOW(fd, 0) = 0x274;
+	WFIFOL(fd, 2) = mail_id;
+	WFIFOW(fd, 6) = fail;
+	WFIFOSET(fd, packet_len(0x274));
 }
-
 
 /// Notification about new mail (ZC_MAIL_RECEIVE).
 /// 024a <mail id>.L <title>.40B <sender>.24B
 void clif_Mail_new(int fd, int mail_id, const char *sender, const char *title)
 {
-	WFIFOHEAD(fd,packet_len(0x24a));
-	WFIFOW(fd,0) = 0x24a;
-	WFIFOL(fd,2) = mail_id;
-	safestrncpy((char*)WFIFOP(fd,6), title, MAIL_TITLE_LENGTH);
-	safestrncpy((char*)WFIFOP(fd,46), sender, NAME_LENGTH);
-	WFIFOSET(fd,packet_len(0x24a));
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
+	
+	WFIFOHEAD(fd, packet_len(0x24a));
+	WFIFOW(fd, 0) = 0x24a;
+	WFIFOL(fd, 2) = mail_id;
+	safestrncpy((char*)WFIFOP(fd, 6), title, MAIL_TITLE_LENGTH);
+	safestrncpy((char*)WFIFOP(fd, 46), sender, NAME_LENGTH);
+	WFIFOSET(fd, packet_len(0x24a));
 }
-
 
 /// Opens/closes the mail window (ZC_MAIL_WINDOWS).
 /// 0260 <type>.L
@@ -14375,12 +14399,16 @@ void clif_Mail_new(int fd, int mail_id, const char *sender, const char *title)
 ///     1 = close
 void clif_Mail_window(int fd, int flag)
 {
-	WFIFOHEAD(fd,packet_len(0x260));
-	WFIFOW(fd,0) = 0x260;
-	WFIFOL(fd,2) = flag;
-	WFIFOSET(fd,packet_len(0x260));
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
+	
+	WFIFOHEAD(fd, packet_len(0x260));
+	WFIFOW(fd, 0) = 0x260;
+	WFIFOL(fd, 2) = flag;
+	WFIFOSET(fd, packet_len(0x260));
 }
-
 
 /// Lists mails stored in inbox (ZC_MAIL_REQ_GET_LIST).
 /// 0240 <packet len>.W <amount>.L { <mail id>.L <title>.40B <read>.B <sender>.24B <time>.L }*amount
@@ -14393,6 +14421,11 @@ void clif_Mail_refreshinbox(struct map_session_data *sd)
 	struct mail_data *md = &sd->mail.inbox;
 	struct mail_message *msg;
 	int len, i, j;
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	len = 8 + (73 * md->amount);
 
@@ -14406,11 +14439,11 @@ void clif_Mail_refreshinbox(struct map_session_data *sd)
 		if (msg->id < 1)
 			continue;
 
-		WFIFOL(fd,8+73*j) = msg->id;
-		memcpy(WFIFOP(fd,12+73*j), msg->title, MAIL_TITLE_LENGTH);
-		WFIFOB(fd,52+73*j) = (msg->status != MAIL_UNREAD);
-		memcpy(WFIFOP(fd,53+73*j), msg->send_name, NAME_LENGTH);
-		WFIFOL(fd,77+73*j) = (uint32)msg->timestamp;
+		WFIFOL(fd, 8 + 73 * j) = msg->id;
+		memcpy(WFIFOP(fd, 12 + 73 * j), msg->title, MAIL_TITLE_LENGTH);
+		WFIFOB(fd, 52 + 73 * j) = (msg->status != MAIL_UNREAD);
+		memcpy(WFIFOP(fd, 53 + 73 * j), msg->send_name, NAME_LENGTH);
+		WFIFOL(fd, 77 + 73 * j) = (uint32)msg->timestamp;
 		j++;
 	}
 	WFIFOSET(fd,len);
@@ -14422,12 +14455,16 @@ void clif_Mail_refreshinbox(struct map_session_data *sd)
 	}
 }
 
-
 /// Mail inbox list request (CZ_MAIL_GET_LIST).
 /// 023f
 void clif_parse_Mail_refreshinbox(int fd, struct map_session_data *sd)
 {
 	struct mail_data* md = &sd->mail.inbox;
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	if( md->amount < MAIL_MAX_INBOX && (md->full || sd->mail.changed) )
 		intif->Mail_requestinbox(sd->status.char_id, 1);
@@ -14438,7 +14475,6 @@ void clif_parse_Mail_refreshinbox(int fd, struct map_session_data *sd)
 	mail->removezeny(sd, 0);
 }
 
-
 /// Opens a mail (ZC_MAIL_REQ_OPEN).
 /// 0242 <packet len>.W <mail id>.L <title>.40B <sender>.24B <time>.L <zeny>.L
 ///     <amount>.L <name id>.W <item type>.W <identified>.B <damaged>.B <refine>.B
@@ -14446,6 +14482,11 @@ void clif_parse_Mail_refreshinbox(int fd, struct map_session_data *sd)
 void clif_Mail_read(struct map_session_data *sd, int mail_id)
 {
 	int i, fd = sd->fd;
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	ARR_FIND(0, MAIL_MAX_INBOX, i, sd->mail.inbox.msg[i].id == mail_id);
 	if( i == MAIL_MAX_INBOX ) {
@@ -14466,31 +14507,31 @@ void clif_Mail_read(struct map_session_data *sd, int mail_id)
 		len = 101 + msg_len;
 
 		WFIFOHEAD(fd,len);
-		WFIFOW(fd,0) = 0x242;
-		WFIFOW(fd,2) = len;
-		WFIFOL(fd,4) = msg->id;
-		safestrncpy((char*)WFIFOP(fd,8), msg->title, MAIL_TITLE_LENGTH + 1);
-		safestrncpy((char*)WFIFOP(fd,48), msg->send_name, NAME_LENGTH + 1);
-		WFIFOL(fd,72) = 0;
-		WFIFOL(fd,76) = msg->zeny;
+		WFIFOW(fd, 0) = 0x242;
+		WFIFOW(fd, 2) = len;
+		WFIFOL(fd, 4) = msg->id;
+		safestrncpy((char*)WFIFOP(fd, 8), msg->title, MAIL_TITLE_LENGTH + 1);
+		safestrncpy((char*)WFIFOP(fd, 48), msg->send_name, NAME_LENGTH + 1);
+		WFIFOL(fd, 72) = 0;
+		WFIFOL(fd, 76) = msg->zeny;
 
 		if( item->nameid && (data = itemdb->exists(item->nameid)) != NULL ) {
-			WFIFOL(fd,80) = item->amount;
-			WFIFOW(fd,84) = (data->view_id)?data->view_id:item->nameid;
-			WFIFOW(fd,86) = data->type;
-			WFIFOB(fd,88) = item->identify;
-			WFIFOB(fd,89) = item->attribute;
-			WFIFOB(fd,90) = item->refine;
-			WFIFOW(fd,91) = item->card[0];
-			WFIFOW(fd,93) = item->card[1];
-			WFIFOW(fd,95) = item->card[2];
-			WFIFOW(fd,97) = item->card[3];
+			WFIFOL(fd, 80) = item->amount;
+			WFIFOW(fd, 84) = (data->view_id) ? data->view_id : item->nameid;
+			WFIFOW(fd, 86) = data->type;
+			WFIFOB(fd, 88) = item->identify;
+			WFIFOB(fd, 89) = item->attribute;
+			WFIFOB(fd, 90) = item->refine;
+			WFIFOW(fd, 91) = item->card[0];
+			WFIFOW(fd, 93) = item->card[1];
+			WFIFOW(fd, 95) = item->card[2];
+			WFIFOW(fd, 97) = item->card[3];
 		} else // no item, set all to zero
-			memset(WFIFOP(fd,80), 0x00, 19);
+			memset(WFIFOP(fd, 80), 0x00, 19);
 
-		WFIFOB(fd,99) = (unsigned char)msg_len;
-		safestrncpy((char*)WFIFOP(fd,100), msg->body, msg_len + 1);
-		WFIFOSET(fd,len);
+		WFIFOB(fd, 99) = (unsigned char)msg_len;
+		safestrncpy((char*)WFIFOP(fd, 100), msg->body, msg_len + 1);
+		WFIFOSET(fd, len);
 
 		if (msg->status == MAIL_UNREAD) {
 			msg->status = MAIL_READ;
@@ -14500,29 +14541,37 @@ void clif_Mail_read(struct map_session_data *sd, int mail_id)
 	}
 }
 
-
 /// Request to open a mail (CZ_MAIL_OPEN).
 /// 0241 <mail id>.L
 void clif_parse_Mail_read(int fd, struct map_session_data *sd)
 {
 	int mail_id = RFIFOL(fd,2);
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	if( mail_id <= 0 )
 		return;
 	if( mail->invalid_operation(sd) )
 		return;
 
-	clif->mail_read(sd, RFIFOL(fd,2));
+	clif->mail_read(sd, RFIFOL(fd, 2));
 }
-
 
 /// Request to receive mail's attachment (CZ_MAIL_GET_ITEM).
 /// 0244 <mail id>.L
 void clif_parse_Mail_getattach(int fd, struct map_session_data *sd)
 {
-	int mail_id = RFIFOL(fd,2);
+	int mail_id = RFIFOL(fd, 2);
 	int i;
 	bool fail = false;
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	if( !chrif->isconnected() )
 		return;
@@ -14582,13 +14631,17 @@ void clif_parse_Mail_getattach(int fd, struct map_session_data *sd)
 	intif->Mail_getattach(sd->status.char_id, mail_id);
 }
 
-
 /// Request to delete a mail (CZ_MAIL_DELETE).
 /// 0243 <mail id>.L
 void clif_parse_Mail_delete(int fd, struct map_session_data *sd)
 {
-	int mail_id = RFIFOL(fd,2);
+	int mail_id = RFIFOL(fd, 2);
 	int i;
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	if( !chrif->isconnected() )
 		return;
@@ -14610,13 +14663,17 @@ void clif_parse_Mail_delete(int fd, struct map_session_data *sd)
 	}
 }
 
-
 /// Request to return a mail (CZ_REQ_MAIL_RETURN).
 /// 0273 <mail id>.L <receive name>.24B
 void clif_parse_Mail_return(int fd, struct map_session_data *sd)
 {
-	int mail_id = RFIFOL(fd,2);
+	int mail_id = RFIFOL(fd, 2);
 	int i;
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	if( mail_id <= 0 )
 		return;
@@ -14630,14 +14687,18 @@ void clif_parse_Mail_return(int fd, struct map_session_data *sd)
 		clif->mail_return(sd->fd, mail_id, 1);
 }
 
-
 /// Request to add an item or Zeny to mail (CZ_MAIL_ADD_ITEM).
 /// 0247 <index>.W <amount>.L
 void clif_parse_Mail_setattach(int fd, struct map_session_data *sd)
 {
-	int idx = RFIFOW(fd,2);
-	int amount = RFIFOL(fd,4);
+	int idx = RFIFOW(fd, 2);
+	int amount = RFIFOL(fd, 4);
 	unsigned char flag;
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	if( !chrif->isconnected() )
 		return;
@@ -14645,9 +14706,8 @@ void clif_parse_Mail_setattach(int fd, struct map_session_data *sd)
 		return;
 
 	flag = mail->setitem(sd, idx, amount);
-	clif->mail_setattachment(fd,idx,flag);
+	clif->mail_setattachment(fd, idx, flag);
 }
-
 
 /// Request to reset mail item and/or Zeny (CZ_MAIL_RESET_ITEM).
 /// 0246 <type>.W
@@ -14657,7 +14717,12 @@ void clif_parse_Mail_setattach(int fd, struct map_session_data *sd)
 ///     2 = remove zeny
 void clif_parse_Mail_winopen(int fd, struct map_session_data *sd)
 {
-	int flag = RFIFOW(fd,2);
+	int flag = RFIFOW(fd, 2);
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	if (flag == 0 || flag == 1)
 		mail->removeitem(sd, 0);
@@ -14665,31 +14730,35 @@ void clif_parse_Mail_winopen(int fd, struct map_session_data *sd)
 		mail->removezeny(sd, 0);
 }
 
-
 /// Request to send mail (CZ_MAIL_SEND).
 /// 0248 <packet len>.W <recipient>.24B <title>.40B <body len>.B <body>.?B
 void clif_parse_Mail_send(int fd, struct map_session_data *sd)
 {
 	struct mail_message msg;
 	int body_len;
+	
+	if(!battle_config.feature_mail){
+		clif->messagecolor_self(fd, COLOR_RED, msg_txt(27));
+		return;
+	}
 
 	if( !chrif->isconnected() )
 		return;
 	if( sd->state.trading )
 		return;
 
-	if( RFIFOW(fd,2) < 69 ) {
+	if( RFIFOW(fd, 2) < 69 ) {
 		ShowWarning("Invalid Msg Len from account %d.\n", sd->status.account_id);
 		return;
 	}
 
 	if( DIFF_TICK(sd->cansendmail_tick, timer->gettick()) > 0 ) {
-		clif->message(sd->fd,msg_sd(sd,875)); //"Cannot send mails too fast!!."
+		clif->message(sd->fd,msg_sd(sd, 875)); //"Cannot send mails too fast!!."
 		clif->mail_send(fd, true); // fail
 		return;
 	}
 
-	body_len = RFIFOB(fd,68);
+	body_len = RFIFOB(fd, 68);
 
 	if (body_len > MAIL_BODY_LENGTH)
 		body_len = MAIL_BODY_LENGTH;
@@ -14697,8 +14766,8 @@ void clif_parse_Mail_send(int fd, struct map_session_data *sd)
 	memset(&msg, 0, sizeof(msg));
 	if (!mail->setattachment(sd, &msg)) { // Invalid Append condition
 		clif->mail_send(sd->fd, true); // fail
-		mail->removeitem(sd,0);
-		mail->removezeny(sd,0);
+		mail->removeitem(sd, 0);
+		mail->removezeny(sd, 0);
 		return;
 	}
 
@@ -14706,15 +14775,15 @@ void clif_parse_Mail_send(int fd, struct map_session_data *sd)
 	msg.send_id = sd->status.char_id;
 	msg.dest_id = 0; // will attempt to resolve name
 	safestrncpy(msg.send_name, sd->status.name, NAME_LENGTH);
-	safestrncpy(msg.dest_name, (char*)RFIFOP(fd,4), NAME_LENGTH);
-	safestrncpy(msg.title, (char*)RFIFOP(fd,28), MAIL_TITLE_LENGTH);
+	safestrncpy(msg.dest_name, (char*)RFIFOP(fd, 4), NAME_LENGTH);
+	safestrncpy(msg.title, (char*)RFIFOP(fd, 28), MAIL_TITLE_LENGTH);
 
 	if (msg.title[0] == '\0') {
 		return; // Message has no length and somehow client verification was skipped.
 	}
 
 	if (body_len)
-		safestrncpy(msg.body, (char*)RFIFOP(fd,69), body_len + 1);
+		safestrncpy(msg.body, (char*)RFIFOP(fd, 69), body_len + 1);
 	else
 		memset(msg.body, 0x00, MAIL_BODY_LENGTH);
 
@@ -14724,7 +14793,6 @@ void clif_parse_Mail_send(int fd, struct map_session_data *sd)
 
 	sd->cansendmail_tick = timer->gettick() + 1000; // 1 Second flood Protection
 }
-
 
 /// AUCTION SYSTEM
 /// By Zephyrus
@@ -17662,7 +17730,7 @@ void clif_show_modifiers (struct map_session_data *sd) {
 	if( sd->status.mod_exp != 100 || sd->status.mod_drop != 100 || sd->status.mod_death != 100 ) {
 		char output[128];
 
-		snprintf(output,128,"VIP Bonus: EXP/JEXP +50%%, Death Penalty -50%%, Item Drop +50%%",
+		snprintf(output,128,"VIP Bonus: EXP/JEXP + 50%%, Death Penalty - 50%%, Item Drop + 50%%",
 				sd->status.mod_exp,sd->status.mod_drop,sd->status.mod_death);
 		clif->broadcast2(&sd->bl,output, strlen(output) + 1, 0xffbc90, 0x190, 12, 0, 0, SELF);
 	}

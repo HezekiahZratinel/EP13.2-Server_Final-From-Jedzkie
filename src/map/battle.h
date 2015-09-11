@@ -507,6 +507,7 @@ struct Battle_Config {
 	int stormgust_knockback;
 
 	int feature_roulette;
+	int feature_mail;
 };
 
 /* criteria for battle_config.idletime_critera */

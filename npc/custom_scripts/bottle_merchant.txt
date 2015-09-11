@@ -1,0 +1,163 @@
+prontera,100,65,5	script	Bottle Merchant#prt	4_F_01,{
+	if(!$lock && !$stock){
+		$bottle_buy = 30000;
+		$lock = 1;
+	}
+	.bottle_sell = 30000 - $bottle_buy;
+
+	mes .name$;
+	mes "My trade is in Empty Bottles.";
+	mes "All my profits are going to support local charities!";
+	next;
+	mes .name$;
+	mes "Of course I think adventurers will find my services quite helpful too!";
+	next;
+	if(select("Current Price:Nevermind") == 2){
+		mes .name$;
+		mes "If you ever have extra bottles, or need some come and see me!";
+		close;
+	}
+	mes .name$;
+	mes "My policies and bottle availability will fluctuate based on the how many bottles I have and remaining money.";
+	next;
+	mes .name$;
+	mes "I have ^bb0000"+ .bottle_sell +"^000000 Empty Bottles.";
+	mes "selling for ^bb0000"+ .price_sell +"^000000 zeny EA.";
+	mes "I'm Buying at most ^00bb00"+ $bottle_buy +"^000000 Empty Bottles,";
+	mes "for ^00bb00"+ .price_buy +"^000000 zeny EA.";
+	next;
+	switch(select("I'd like to ^bb0000SELL^000000:I'd like to ^00bb00Buy^000000:Nevermind")){
+	case 1:
+		if(.bottle_sell > 29999){
+			mes .name$;
+			mes "My stocks are full right now.";
+			close;
+		}
+		mes .name$;
+		mes "How many of your ^990000"+countitem(.item_id)+"^000000 Empty Bottles do you want to sell?";
+		mes "I'll give you my price and limits before we confirm.";
+		mes "I can only buy up to 500 at a time.";
+		next;
+		input .@input_sell;
+		
+		mes .name$;
+		if(.@input_sell == 0){
+			mes "No problem, I'll be here at your service!";
+			close;
+		}
+		if(countitem(.item_id) < .@input_sell){
+			mes "You don't have that many bottles.";
+			close;
+		}
+		if(.@input_sell > 500){
+			mes "I can only buy up to 500 at a time.";
+			close;
+		}
+		if ( $bottle_buy - .@input_sell < 0 ) {
+			mes "The number you input will over my limit.";
+			close;
+		}
+		mes "So I can take ^00bb00"+.@input_sell+" Empty Bottles^000000,";
+		mes "For ^bb0000"+.price_buy+"z EA^000000, for a total of ^0000bb"+(.price_buy*.@input_sell)+"z.^000000";
+		next;
+		if(select("Yes!:No Thanks") == 2){
+			mes .name$;
+			mes "No problem, I'll be here at your service!";
+			close;
+		}
+		if ( $bottle_buy - .@input_sell < 0 ) {// re-check in case someone already buy
+			mes .name$;
+			mes "Someone already buy. The number you input will over my limit.";
+			close;
+		}
+		.bottle_sell += .@input_sell;
+		Zeny = Zeny + (.price_buy*.@input_sell);
+		$bottle_buy -= .@input_sell;
+		delitem .item_id,.@input_sell;
+		mes .name$;
+		mes "Thank you for your business!";
+		close;
+	case 2:
+		mes .name$;
+		mes "How many of my ^0000bb"+ .bottle_sell +"^000000 Empty Bottles do you want to buy from me?";
+		mes "I'll sell them for ^bb0000"+.price_sell+"z EA^000000.";
+		mes "It looks like you can afford ^bb0000"+(Zeny/.price_sell)+"^000000.";
+		mes "I will only sell up to 500 at a time by the way.";
+		next;
+		input .@input_buy;
+
+		mes .name$;
+		if(.@input_buy == 0){
+			mes "No problem, I'll be here at your service!";
+			close;
+		}
+		if( .@input_buy * .price_sell > Zeny){
+			mes "You don't have that much zeny!.";
+			mes "Just because I work for charities doesn't mean I can give these away!";
+			close;
+		}
+		if(.@input_buy > 500){
+			mes "I can only buy up to 500 at a time.";
+			close;
+		}
+		if ( .bottle_sell - .@input_buy < 0 ) {
+			mes "The number you input will over my limit.";
+			close;
+		}
+		if ( checkweight( 713,.@input_buy ) == 0) {
+			mes "You will be overweight, come back later.";
+			close;
+		}
+		mes "So I can sell you the "+.@input_buy+" Empty Bottles,";
+		mes "For ^bb0000"+.price_sell+"z EA^000000, for a total of ^0000bb"+(.price_sell*.@input_buy)+"^000000.";
+		next;
+		if(select("Yes!:No Thanks") == 2){
+			mes .name$;
+			mes "No problem, I'll be here at your service!";
+			close;
+		}
+		if ( .bottle_sell - .@input_buy < 0 ) {
+			mes .name$;
+			mes "Someone already buy. The number you input will over my limit.";
+			close;
+		}
+		.bottle_sell -= .@input_buy;
+		Zeny = Zeny - (.price_sell*.@input_buy);
+		$bottle_buy += .@input_buy;
+		getitem .item_id,.@input_buy;
+		mes .name$;
+		mes "Thank you for your business!";
+		close;		
+	case 3:
+		mes .name$;
+		mes "No problem, I'll be here at your service!";
+		close;
+	}
+	
+OnInit:
+	// NPC Name
+	.name$ = "[Bethany]";
+
+	// Item ID & Prices
+	.item_id = 713;
+	.price_buy = 400;
+	.price_sell = 700;
+	
+	// Emoticon
+	initnpctimer;
+	end;
+	
+OnTimer5000:
+	switch(rand(1,8)){
+		case 1: specialeffect EF_POTION1; break;
+		case 2: specialeffect EF_POTION2; break;
+		case 3: specialeffect EF_POTION3; break;
+		case 4: specialeffect EF_POTION4; break;
+		case 5: specialeffect EF_POTION5; break;
+		case 6: specialeffect EF_POTION6; break;
+		case 7: specialeffect EF_POTION7; break;
+		case 8: specialeffect EF_POTION8; break;
+	}
+	initnpctimer;
+	end;
+}

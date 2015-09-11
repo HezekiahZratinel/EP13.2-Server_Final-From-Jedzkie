@@ -8604,18 +8604,18 @@ BUILDIN(downrefitem)
  *------------------------------------------*/
 BUILDIN(delequip)
 {
-	int i=-1,num;
+	int i = -1, num;
 	TBL_PC *sd;
 
-	num = script_getnum(st,2);
+	num = script_getnum(st, 2);
 	sd = script->rid2sd(st);
 	if( sd == NULL )
 		return true;
 
 	if (num > 0 && num <= ARRAYLENGTH(script->equip))
-		i=pc->checkequip(sd,script->equip[num-1]);
+		i = pc->checkequip(sd,script->equip[num - 1]);
 	if(i >= 0) {
-		pc->unequipitem(sd, i, PCUNEQUIPITEM_RECALC|PCUNEQUIPITEM_FORCE); //recalculate bonus
+		pc->unequipitem(sd, i, PCUNEQUIPITEM_RECALC | PCUNEQUIPITEM_FORCE); //recalculate bonus
 		pc->delitem(sd, i, 1, 0, DELITEM_FAILREFINE, LOG_TYPE_SCRIPT);
 		return true;
 	}
@@ -8634,7 +8634,7 @@ BUILDIN(statusup) {
 	int type;
 	TBL_PC *sd;
 
-	type=script_getnum(st,2);
+	type = script_getnum(st, 2);
 	sd = script->rid2sd(st);
 	if( sd == NULL )
 		return true;
@@ -8648,16 +8648,16 @@ BUILDIN(statusup) {
  *------------------------------------------*/
 BUILDIN(statusup2)
 {
-	int type,val;
+	int type, val;
 	TBL_PC *sd;
 
-	type=script_getnum(st,2);
-	val=script_getnum(st,3);
+	type = script_getnum(st ,2);
+	val = script_getnum(st, 3);
 	sd = script->rid2sd(st);
 	if( sd == NULL )
 		return true;
 
-	pc->statusup2(sd,type,val);
+	pc->statusup2(sd, type, val);
 
 	return true;
 }
@@ -8682,7 +8682,7 @@ BUILDIN(bonus) {
 	if( sd == NULL )
 		return true; // no player attached
 
-	type = script_getnum(st,2);
+	type = script_getnum(st, 2);
 	switch( type ) {
 		case SP_AUTOSPELL:
 		case SP_AUTOSPELL_WHENHIT:
@@ -8707,42 +8707,42 @@ BUILDIN(bonus) {
 			}
 			// else fall through
 		default:
-			val1 = script_getnum(st,3);
+			val1 = script_getnum(st, 3);
 			break;
 	}
 
-	switch( script_lastdata(st)-2 ) {
+	switch( script_lastdata(st) - 2 ) {
 		case 1:
 			pc->bonus(sd, type, val1);
 			break;
 		case 2:
-			val2 = script_getnum(st,4);
+			val2 = script_getnum(st, 4);
 			pc->bonus2(sd, type, val1, val2);
 			break;
 		case 3:
-			val2 = script_getnum(st,4);
-			val3 = script_getnum(st,5);
+			val2 = script_getnum(st, 4);
+			val3 = script_getnum(st, 5);
 			pc->bonus3(sd, type, val1, val2, val3);
 			break;
 		case 4:
-			if( type == SP_AUTOSPELL_ONSKILL && script_isstringtype(st,4) )
-				val2 = skill->name2id(script_getstr(st,4)); // 2nd value can be skill name
+			if( type == SP_AUTOSPELL_ONSKILL && script_isstringtype(st, 4) )
+				val2 = skill->name2id(script_getstr(st, 4)); // 2nd value can be skill name
 			else
-				val2 = script_getnum(st,4);
+				val2 = script_getnum(st, 4);
 
-			val3 = script_getnum(st,5);
-			val4 = script_getnum(st,6);
+			val3 = script_getnum(st, 5);
+			val4 = script_getnum(st, 6);
 			pc->bonus4(sd, type, val1, val2, val3, val4);
 			break;
 		case 5:
 			if( type == SP_AUTOSPELL_ONSKILL && script_isstringtype(st,4) )
-				val2 = skill->name2id(script_getstr(st,4)); // 2nd value can be skill name
+				val2 = skill->name2id(script_getstr(st, 4)); // 2nd value can be skill name
 			else
-				val2 = script_getnum(st,4);
+				val2 = script_getnum(st, 4);
 
-			val3 = script_getnum(st,5);
-			val4 = script_getnum(st,6);
-			val5 = script_getnum(st,7);
+			val3 = script_getnum(st, 5);
+			val4 = script_getnum(st, 6);
+			val5 = script_getnum(st, 7);
 			pc->bonus5(sd, type, val1, val2, val3, val4, val5);
 			break;
 		default:
@@ -12097,37 +12097,37 @@ BUILDIN(gvgoff) {
 //Optional second parameter added by [Skotlex]
 BUILDIN(emotion) {
 	int type;
-	int player=0;
+	int player = 0;
 
-	type=script_getnum(st,2);
+	type = script_getnum(st,2);
 	if(type < 0 || type > 100)
 		return true;
 
 	if( script_hasdata(st,3) )
-		player=script_getnum(st,3);
+		player=script_getnum(st, 3);
 
 	if (player) {
 		TBL_PC *sd = NULL;
-		if( script_hasdata(st,4) )
-			sd = map->nick2sd(script_getstr(st,4));
+		if( script_hasdata(st, 4) )
+			sd = map->nick2sd(script_getstr(st, 4));
 		else
 			sd = script->rid2sd(st);
 		if (sd)
 			clif->emotion(&sd->bl,type);
-	} else if( script_hasdata(st,4) ) {
-		TBL_NPC *nd = npc->name2id(script_getstr(st,4));
+	} else if( script_hasdata(st, 4) ) {
+		TBL_NPC *nd = npc->name2id(script_getstr(st, 4));
 		if(nd)
-			clif->emotion(&nd->bl,type);
+			clif->emotion(&nd->bl, type);
 	} else
-		clif->emotion(map->id2bl(st->oid),type);
+		clif->emotion(map->id2bl(st->oid), type);
 	return true;
 }
 
 int buildin_maprespawnguildid_sub_pc(struct map_session_data* sd, va_list ap)
 {
-	int16 m=va_arg(ap,int);
-	int g_id=va_arg(ap,int);
-	int flag=va_arg(ap,int);
+	int16 m = va_arg(ap, int);
+	int g_id = va_arg(ap, int);
+	int flag = va_arg(ap, int);
 
 	if(!sd || sd->bl.m != m)
 		return 0;
@@ -12136,13 +12136,13 @@ int buildin_maprespawnguildid_sub_pc(struct map_session_data* sd, va_list ap)
 	 || (sd->status.guild_id != g_id && flag&2) //Warp out outsiders
 	 || (sd->status.guild_id == 0)              // Warp out players not in guild [Valaris]
 	  )
-		pc->setpos(sd,sd->status.save_point.map,sd->status.save_point.x,sd->status.save_point.y,CLR_TELEPORT);
+		pc->setpos(sd, sd->status.save_point.map, sd->status.save_point.x, sd->status.save_point.y, CLR_TELEPORT);
 	return 1;
 }
 
-int buildin_maprespawnguildid_sub_mob(struct block_list *bl,va_list ap)
+int buildin_maprespawnguildid_sub_mob(struct block_list *bl, va_list ap)
 {
-	struct mob_data *md=(struct mob_data *)bl;
+	struct mob_data *md = (struct mob_data *)bl;
 
 	if(!md->guardian_data && md->class_ != MOBID_EMPERIUM)
 		status_kill(bl);
@@ -12151,46 +12151,46 @@ int buildin_maprespawnguildid_sub_mob(struct block_list *bl,va_list ap)
 }
 
 BUILDIN(maprespawnguildid) {
-	const char *mapname=script_getstr(st,2);
-	int g_id=script_getnum(st,3);
-	int flag=script_getnum(st,4);
+	const char *mapname = script_getstr(st, 2);
+	int g_id = script_getnum(st, 3);
+	int flag = script_getnum(st, 4);
 
-	int16 m=map->mapname2mapid(mapname);
+	int16 m = map->mapname2mapid(mapname);
 
 	if(m == -1)
 		return true;
 
 	//Catch ALL players (in case some are 'between maps' on execution time)
-	map->foreachpc(script->buildin_maprespawnguildid_sub_pc,m,g_id,flag);
+	map->foreachpc(script->buildin_maprespawnguildid_sub_pc, m, g_id, flag);
 	if (flag&4) //Remove script mobs.
-		map->foreachinmap(script->buildin_maprespawnguildid_sub_mob,m,BL_MOB);
+		map->foreachinmap(script->buildin_maprespawnguildid_sub_mob, m, BL_MOB);
 	return true;
 }
 
 BUILDIN(agitstart) {
-	if(map->agit_flag==1) return true;      // Agit already Start.
-	map->agit_flag=1;
+	if(map->agit_flag == 1) return true;      // Agit already Start.
+	map->agit_flag = 1;
 	guild->agit_start();
 	return true;
 }
 
 BUILDIN(agitend) {
-	if(map->agit_flag==0) return true;      // Agit already End.
-	map->agit_flag=0;
+	if(map->agit_flag == 0) return true;      // Agit already End.
+	map->agit_flag = 0;
 	guild->agit_end();
 	return true;
 }
 
 BUILDIN(agitstart2) {
-	if(map->agit2_flag==1) return true;      // Agit2 already Start.
-	map->agit2_flag=1;
+	if(map->agit2_flag == 1) return true;      // Agit2 already Start.
+	map->agit2_flag = 1;
 	guild->agit2_start();
 	return true;
 }
 
 BUILDIN(agitend2) {
-	if(map->agit2_flag==0) return true;      // Agit2 already End.
-	map->agit2_flag=0;
+	if(map->agit2_flag == 0) return true;      // Agit2 already End.
+	map->agit2_flag = 0;
 	guild->agit2_end();
 	return true;
 }
@@ -12199,7 +12199,7 @@ BUILDIN(agitend2) {
  * Returns whether woe is on or off.
  *------------------------------------------*/
 BUILDIN(agitcheck) {
-	script_pushint(st,map->agit_flag);
+	script_pushint(st, map->agit_flag);
 	return true;
 }
 
@@ -12207,7 +12207,7 @@ BUILDIN(agitcheck) {
  * Returns whether woese is on or off.
  *------------------------------------------*/
 BUILDIN(agitcheck2) {
-	script_pushint(st,map->agit2_flag);
+	script_pushint(st, map->agit2_flag);
 	return true;
 }
 
@@ -12216,7 +12216,7 @@ BUILDIN(agitcheck2) {
 /// flagemblem <guild_id>;
 BUILDIN(flagemblem) {
 	TBL_NPC* nd;
-	int g_id = script_getnum(st,2);
+	int g_id = script_getnum(st, 2);
 
 	if(g_id < 0) return true;
 
