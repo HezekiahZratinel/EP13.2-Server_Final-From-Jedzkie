@@ -32,3 +32,5 @@ louyang	mapflag	loadevent
 hugel	mapflag	loadevent
 rachel	mapflag	loadevent
 veins	mapflag	loadevent
+mag_dun02	mapflag	loadevent
+hu_fild05	mapflag	loadevent

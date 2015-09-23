@@ -1,0 +1,381 @@
+// Thor Volcano 2 Quest [iRO]
+yuno,176,186,4	script	Survey Leader#juno	4_M_JOB_BLACKSMITH,{
+	if(BaseLevel < 60){
+		mes .name$;
+		mes "I'm gonna have to ask you";
+		mes "to go ahead and come";
+		mes "back when you";
+		mes "have had a chance";
+		mes "to complete additional training.";
+		next;
+		mes .name$;
+		mes "mmkay? Thats great.";
+		close;
+	}
+	if(questprogress(16200) == 0) && (THOR_V2_QUEST == 0){
+		mes .name$;
+		mes "Hello "+strcharinfo(0)+", What's happenin'";
+		mes "Yeah, we have a problem with some missing supplies.";
+		next;
+		mes .name$;
+		mes "It would be great if you were to go ahead and bring me a couple of things.";
+		next;
+		mes .name$;
+		mes "I need you to go ahead";
+		mes "and get me";
+		mes "^0000ff20 Ice Cubic^000000 and";
+		mes "^0000ff5 Ice Cream^000000.";
+		setquest 16200;
+		showevent QTYPE_NONE;
+		Q_BUBBLE = 1;
+		THOR_V2_QUEST = 1;
+		close;
+	}
+	if(questprogress(16200) == 1) && (THOR_V2_QUEST == 1){
+		if(countitem(Ice_Piece) < 20 || countitem(Ice_Cream) < 5){
+			mes .name$;
+			mes strcharinfo(0)+"! What's happening...";
+			mes "Yeeaah, did you get around to getting those supplies?";
+			next;
+			mes .name$;
+			mes "I'm gonna ask you to go ahead";
+			mes "and get me";
+			mes "^0000ff20 Ice Cubic^000000 and";
+			mes "^0000ff5 Ice Cream^000000";
+			mes "mmmkay? Thanks "+strcharinfo(0)+".";
+			close;
+		} else {
+			delitem Ice_Piece,20;
+			delitem Ice_Cream,5;
+			changequest 16200,16201;
+			showevent QTYPE_NONE;
+			THOR_V2_QUEST = 2;
+			mes .name$;
+			mes "Hey thanks "+strcharinfo(0)+".";
+			mes "That's really great.";
+			mes "Its good to see such a team player";
+			next;
+			mes .name$;
+			mes "Hey it would be great if you could do me another favor.";
+			next;
+			mes .name$;
+			mes "I'm gonna need you to go ahead";
+			mes "and go down to ^0000ffNogg Road^000000";
+			mes "all the way at the bottom.";
+			next;
+			mes .name$;
+			mes "Go and get the ^0000ffTPS Report^000000 from";
+			mes "the other team members down";
+			mes "there. Okay? That's great.";
+			mes "Thanks "+strcharinfo(0)+".";
+			close;
+		}
+	}
+	if(questprogress(16201) == 1) && (THOR_V2_QUEST == 2){
+		mes .name$;
+		mes "Hey, "+strcharinfo(0)+"! What's happening...";
+		mes "Yeeaah, did you get around to";
+		mes "getting that ^0000ffTPS Report^000000 from";
+		mes "down in ^0000ffNogg Road^000000?";
+		close;
+	}
+	if(questprogress(16203) == 1) && (THOR_V2_QUEST == 4){
+		mes .name$;
+		mes "Heya, "+strcharinfo(0)+"! What's happening...";
+		next;
+		changequest 16203,16204;
+		THOR_V2_QUEST = 5;
+		mes "^ff0000You tell him the details";
+		mes "from the surveyors^000000";
+		mes "^0000ffTPS Report^000000.";
+		next;
+		mes .name$;
+		mes "That's great. I'll just";
+		mes "get the ^0000ffTPS Report^000000";
+		mes "from you.";
+		next;
+		mes .name$;
+		mes "Yeah, I'm gonna go ahead";
+		mes "and ask you to do me";
+		mes "another favor, mkay?";
+		next;
+		mes .name$;
+		mes "I need you to go on";
+		mes "back down to ^0000ffNogg Road^000000 again";
+		mes "and check out what's in that";
+		mes "^0000ffcrack in the wall^000000.";
+		next;
+		mes .name$;
+		mes "Just go ahead and jump in";
+		mes "and see whats at the other end.";
+		mes "mkay? Thats great.";
+		showevent QTYPE_NONE;
+		close;
+	}
+	if(questprogress(16204) == 1) && (THOR_V2_QUEST == 5){
+		mes .name$;
+		mes strcharinfo(0)+"! What's happenin'";
+		mes "Did you get around checking";
+		mes "that ^0000ffcrack in the wall^000000";
+		mes "down in ^0000ffNogg Road^000000?";
+		next;
+		mes .name$;
+		mes "If you could go ahead";
+		mes "and do that it";
+		mes "would be great. Thanks.";
+		close;
+	}
+	if(questprogress(16205) == 1){
+		completequest 16205;
+		showevent QTYPE_NONE;
+		getexp 100000,75000;
+		mes .name$;
+		mes "You've done a super A+ job!";
+		mes "Here you go, you've earned this!";
+		close;
+	}
+	mes .name$;
+	mes "Uhm, yeah, I need you to come to work";
+	mes "on saturday. We lost a few people and";
+	mes "we need to kinda play catchup.";
+	mes "That would be great.";
+	close;
+	
+OnInit:
+	.name$ = "[Survey Leader Limberg]";
+	end;
+	
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == strnpcinfo(4)){
+		if(BaseLevel >= 59) && (Q_BUBBLE == 0){
+			showevent QTYPE_QUEST;
+			end;
+		}
+		if(questprogress(16200) == 1) && (countitem(Ice_Piece) > 19) && (countitem(Ice_Cream) > 4){
+			showevent QTYPE_QUEST;
+			end;
+		}
+		if(questprogress(16203) == 1) && (THOR_V2_QUEST == 4){
+			showevent QTYPE_QUEST;
+			end;
+		}
+		if(questprogress(16205) == 1){
+			showevent QTYPE_QUEST;
+			end;
+		}
+	}
+}
+
+// Surveyor Peter
+mag_dun02,246,62,7	script	Surveyor#01	4_M_REPAIR,{
+	if(questprogress(16201) == 1) && (THOR_V2_QUEST == 2){
+		mes .name$;
+		mes "^0000ffTPS Report^000000?";
+		mes "Um, well I really didn't feel";
+		mes "like making one today";
+		mes "They are pointless.";
+		next;
+		mes .name$;
+		mes "This job is already dangerous";
+		mes "and tiring. Now Limberg";
+		mes "wants me to do some";
+		mes "pointless busy work!?";
+		next;
+		mes .name$;
+		mes "I don't think so...";
+		mes "go get It from somebody else.";
+		changequest 16201,16202;
+		showevent QTYPE_NONE;
+		THOR_V2_QUEST = 3;
+		close2;
+		doevent "Surveyor#02::OnThorDunQ2";
+		end;
+	}
+	if(questprogress(16202) == 1) && (THOR_V2_QUEST == 3){
+		mes .name$;
+		mes "You're gonna have to get";
+		mes "that ^0000ffTPS Report^000000 from someone";
+		mes "else.";
+		close;
+	}
+	mes .name$;
+	mes "It sure hot down here.";
+	mes "...whew...";
+	mes "I'd rather fishing.";
+	close;
+
+OnInit:
+	.name$ = "[Surveyor Peter]";
+	end;
+	
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == strnpcinfo(4)){
+		if(questprogress(16201) == 1) && (THOR_V2_QUEST == 2){
+			showevent QTYPE_QUEST;
+			end;
+		}
+	}
+}
+
+// Surveyor Bob
+mag_dun02,247,68,7	script	Surveyor#02	4_M_SEAMAN,{
+	if(questprogress(16201) == 1) && (THOR_V2_QUEST == 2){
+		mes .name$;
+		mes "Boy I love this job...";
+		mes "Haha get it? ^ff0000LAVA^000000?";
+		mes "bwahahahahaha!";
+		close;
+	}
+	if(questprogress(16202) == 1) && (THOR_V2_QUEST == 3){
+		mes .name$;
+		mes "Hmm, sounds like";
+		mes "someone's got";
+		mes "a case of the mondays.";
+		next;
+		mes .name$;
+		mes "Anyways, our progress";
+		mes "has been good.";
+		mes "We have 70% coverage";
+		mes "of the geothermal vents";
+		mes "and 62% of the lava flow";
+		mes "pattern mapped out.";
+		next;
+		mes .name$;
+		mes "Better still we found a";
+		mes "^0000ffcrack in the wall^000000";
+		mes "that leads to an empty";
+		mes "lava tube. We haven't";
+		mes "explored inside yet.";
+		next;
+		mes .name$;
+		mes "Limberg should definitely";
+		mes "hear about our find.";
+		mes "Not sure why they are called";
+		mes "^0000ffTPS Reports^000000 though.";
+		showevent QTYPE_NONE;
+		changequest 16202,16203;
+		THOR_V2_QUEST = 4;
+		close;
+	}
+	switch(rand(1,2)){
+	case 1:
+		mes .name$;
+		mes "Much of the area under Schwaltzvalt Republic is volcanic.";
+		mes "Networks of lava tubes criss-cross across underground.";
+		next;
+		mes .name$;
+		mes "The tube you explored";
+		mes "Has many branches";
+		mes "The wind pushes you along but you can still";
+		mes "control the path";
+		mes "a bit with your arms.";
+		close;
+	case 2:
+		mes .name$;
+		mes "Hmm, the tunnels";
+		mes "in this lava tube";
+		mes "seems to shift";
+		next;
+		mes .name$;
+		mes "Seems it depends on the time of day";
+		mes "......";
+		next;
+		mes .name$;
+		mes "How strange.";
+		close;
+	}
+	
+OnThorDunQ2:
+	showevent QTYPE_QUEST;
+	end;
+
+OnInit:
+	.name$ = "[Surveyor Bob]";
+	end;
+	
+OnPCLoadMapEvent:
+	if(strcharinfo(3) == strnpcinfo(4)){
+		if(questprogress(16202) == 1) && (THOR_V2_QUEST == 3){
+			showevent QTYPE_QUEST;
+			end;
+		}
+	}
+}
+
+// Survey Diggers
+mag_dun02,238,66,7	script	Survey Digger#01::SurveyDigger	4_M_EINMINER,{
+	mes .name$;
+	switch(rand(1,4)){
+	case 1:
+		mes "Born one mornin' when the sun didn't shine";
+		mes "Picked up a shovel and I walked to the mine";
+		next;
+		mes .name$;
+		mes "I hauled Sixteen Tons of";
+		mes "number 9 coal";
+		mes "And the straw-boss said,";
+		mes "'Well bless my soul'";
+		close;
+	case 2:
+		mes "Gonna digg me a hole!";
+		close;
+	case 3:
+		mes "Hi ho hi ho";
+		mes "its off to dig I go";
+		close;
+	case 4:
+		mes "Well I been workin in a coal mine";
+		mes "Goin down down";
+		mes "Workin in a coal mine";
+		mes "Whew about to slip down";
+		close;
+	}
+	
+OnInit:
+	.name$ = "[Survey Digger]";
+	end;
+}
+
+// Duplicates
+mag_dun02,241,75,7	duplicate(SurveyDigger)	Survey Digger#02	4_M_EINMINER
+mag_dun02,247,75,7	duplicate(SurveyDigger)	Survey Digger#03	4_M_EINMINER
+
+mag_dun02,244,75,0	script	Lava Tube#nogg	HIDDEN_NPC,{
+	mes "You see a narrow crack";
+	mes "In the surrounding volcanic rock";
+	next;
+	mes "Powerful wind gusts threaten";
+	mes "to pull you into the breach";
+	mes "as if a great beast were";
+	mes "inhaling on the far end.";
+	close;
+}
+
+mag_dun02,244,76,0	script	#thor_v2_warp	-1,1,1,{
+
+OnTouch:
+	if(questprogress(16204) == 1) || (THOR_V2_QUEST == 6){
+		if(questprogress(16204) == 1) changequest 16204,16205;
+		THOR_V2_QUEST = 6;
+		mes "You stand at the edge of an";
+		mes "important decision.";
+		mes "What would you do?";
+		next;
+		switch(select("Go full speed!:Jump and flap your arms!:Back off.")){
+		case 1:
+			close2;
+			warp "thor_v02",0,0;
+			end;
+		case 2:
+			close2;
+			warp "thor_v02",0,0;
+			end;
+		case 3:
+			close2;
+			warp "mag_dun02",244,72;
+			end;
+		}
+	} else {
+		end;
+	}
+}

@@ -1,0 +1,154 @@
+-	script	warper	-1,{
+	// Dungeons
+	.@abbey_dun = getmapusers("abyss_01") + getmapusers("abyss_01") + getmapusers("abyss_01");
+	.@ama_dun = getmapusers("ama_dun01") + getmapusers("ama_dun02") + getmapusers("ama_dun03");
+	
+	
+	
+	disable_items;
+	mes "[Warp Board]";
+	mes "Welcome to the Kafra Teleporting Services.";
+	mes "We can warp you to many different places around Rune-Midgard.";
+	next;
+	Main_Menu:
+	switch(select(""+map_name$+" :Cities:Dungeons:Special Maps")){
+	case 1:
+		if(lastwarp$ == strcharinfo(3)){
+			message strcharinfo(0),"You are already in "+map_name2$;
+			close;
+		}
+		if(lastwarp$ == ""){
+			close;
+		}
+		warp lastwarp$, lastwarpx, lastwarpy;
+		end;
+	case 2:
+		switch(select("Prontera [^0000bb"+getmapusers("prontera")+"^000000]:Morroc [^0000bb"+getmapusers("morocc")+"^000000]:Geffen:Payon:Alberta:Izlude:Al De Baran:Lutie:Comodo:Juno:Amatsu:Gonryun:Umbala:Niflheim:Louyang:Jawaii:Ayothaya:Einbroch:Lighthalzen:Einbech:Hugel:Rachel:Veins:Moscovia:Mid Camp:Manuk:Splendide:^0000bbMain Menu^000000")){
+		case 1:
+			if(strcharinfo(0) == strcharinfo(3)){
+				message strcharinfo(0),"You are already in "+map_name2$;
+				close;
+			}
+			warp "prontera",156,91;
+			lastwarp$ = "prontera";
+			map_name$ = "^ff0000Prontera^000000 [^0000bb"+getmapusers("prontera")+"^000000]";
+			map_name2$ = "Prontera.";
+			lastwarpx = 156;
+			lastwarpy = 91;
+			close;
+		case 2:
+			if(strcharinfo(0) == strcharinfo(3)){
+				message strcharinfo(0),"You are already in "+map_name2$;
+				close;
+			}
+			warp "morocc",156,46;
+			lastwarp$ = "morocc";
+			map_name$ = "^ff0000Morroc^000000 [^0000bb"+getmapusers("morocc")+"^000000]";
+			map_name2$ = "Morroc.";
+			lastwarpx = 156;
+			lastwarpy = 46;
+			close;
+		case 3:
+			close;
+		case 4:
+			close;
+		case 5:
+			close;
+		case 6:
+			close;
+		case 7:
+			close;
+		case 8:
+			close;
+		case 9:
+			close;
+		case 10:
+			close;
+		case 11:
+			close;
+		case 12:
+			close;
+		case 13:
+			close;
+		case 14:
+			close;
+		case 15:
+			close;
+		case 16:
+			close;
+		case 17:
+			close;
+		case 18:
+			close;
+		case 19:
+			close;
+		case 20:
+			close;
+		case 21:
+			close;
+		case 22:
+			close;
+		case 23:
+			close;
+		case 24:
+			close;
+		case 25:
+			close;
+		case 26:
+			close;
+		case 27:
+			close;
+		case 28:
+			goto Main_Menu;
+		}
+	case 3:
+		switch(select("Abyss Lake Dungeon [^0000bb"+.@abyss_dun+"^000000]:Amatsu Dungeon [^0000bb"+.@amatsu_dun+"^000000]:^0000bbMain Menu^000000")){
+		case 1:
+			if(strcharinfo(0) == strcharinfo(3)){
+				message strcharinfo(0),"You are already in "+map_name2$;
+				close;
+			}
+			warp "hu_fild05",190,206;
+			lastwarp$ = "hu_fild05";
+			map_name$ = "^ff0000Abyss Lakes^000000 [^0000bb"+.@abyss_dun+"^000000]";
+			map_name2$ = "Abyss Lakes";
+			lastwarpx = 190;
+			lastwarpy = 206;
+			close;
+		case 2:
+			if(strcharinfo(0) == strcharinfo(3)){
+				message strcharinfo(0),"You are already in "+map_name2$;
+				close;
+			}
+			warp "ama_dun01",229,10;
+			lastwarp$ = "ama_dun01";
+			map_name$ = "^ff0000Amatsu Dungeon^000000 [^0000bb"+.@ama_dun+"^000000]";
+			map_name2$ = "Amatsu Dungeon";
+			lastwarpx = 229;
+			lastwarpy = 10;
+			close;
+		case 3:
+			goto Main_Menu;
+		}
+	case 4:
+		close;
+	}
+	
+OnInit:
+	initnpctimer;
+	end;
+	
+OnTimer5000:
+	emotion e_gasp;
+	initnpctimer;
+	end;
+}
+
+// Cities
+prontera,164,94,4	duplicate(warper)	Warp Board#prt	4_BOARD3
+morocc,166,53,4	duplicate(warper)	Warp Board#moc	4_BOARD3
+
+// Dungeon
+hu_fild05,195,203,2	duplicate(warper)	Warp Board#abyss	4_BOARD3
+nameless_n,158,190,5	duplicate(warper)	Warp Board#abbey	4_BOARD3
+ama_dun01,229,14,4	duplicate(warper)	Warp Board#ama_dun	4_BOARD3

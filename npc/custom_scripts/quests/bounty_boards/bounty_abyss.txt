@@ -1,0 +1,183 @@
+hu_fild05,185,210,5	script	Bounty Boards#abyss	2_BULLETIN_BOARD,{
+	if(questprogress(20008,PLAYTIME) == 2) erasequest 20008;
+	mes "[Bounty Board]";
+	mes "You've stumbled upon what appears to be a bulletin board with wanted ads.";
+	mes "Take a closer look?";
+	next;
+	mes "[Bounty Board]";
+	mes "There are many listing for monster hunting and collecting items.";
+	next;
+	switch(select("Check bounty missions:Collect bounty rewards:I want to QUIT hunting:Not interested.")){
+	case 1:
+		switch(select("Hunting Mission:Collecting Mission:Cancel.")){
+		case 1:
+			mes "[Bounty Board]";
+			mes "There is a list of monsters on the board.";
+			mes "Looking through it you decide to take one hunting task.";
+			next;
+			switch(select("Ferus (Green):Ferus (Red):Acidus (Blue):Acidus (Gold):Dragon Egg:Hydrolancer:[^ff0000MVP^000000] Detardeurus:Cancel")){
+			case 1:
+				mes "[Bounty Board]";
+				mes "There is a bounty to hunt 50 Green Ferus.";
+				next;
+				if(select("I'll do it.:Uhh actually nevermind.") == 2){
+					close;
+				}
+				if(questprogress(20000,HUNTING) == 0) setquest 20000;
+					mes "[Bounty Board]";
+					mes "You have accepted the bounty to hunt Green Ferus.";
+					close;
+			case 2:
+				mes "[Bounty Board]";
+				mes "There is a bounty to hunt 50 Red Ferus.";
+				next;
+				if(select("I'll do it.:Uhh actually nevermind.") == 2){
+					close;
+				}
+				if(questprogress(20001,HUNTING) == 0) setquest 20001;
+					mes "[Bounty Board]";
+					mes "You have accepted the bounty to hunt Red Ferus.";
+					close;
+			case 3:
+				close;
+			case 4:
+				close;
+			case 5:
+				close;
+			case 6:
+				close;
+			case 7:
+				mes "[Bounty Board]";
+				mes "There is a bounty to hunt 1 Detardeurus.";
+				mes "^ff0000After completing this mssion, you must wait 1 day to re-take this mission again.^000000";
+				next;
+				if(select("I'll do it.:Uhh actually nevermind.") == 2){
+					close;
+				}
+				if(questprogress(20008,PLAYTIME) == 1){
+					mes "[Bounty Board]";
+					mes "You cannot re-take this mission as of this moment.";
+					mes "Please come back later.";
+					close;
+				}
+				if(questprogress(20007,HUNTING) == 0) setquest 20007;
+					mes "[Bounty Board]";
+					mes "You have accepted the bounty to hunt Detardeurus.";
+					close;
+			case 8:
+				mes "[Bounty Board]";
+				mes "You have not decided not to take any bounties.";
+				close;
+			}
+		case 2:
+			mes "[Bounty Board]";
+			mes "There is a list of monsters on the board.";
+			mes "Looking through it you decide to take one collecting task.";
+			close;
+		case 3:
+			close;
+		}
+	case 2:
+		mes "[Bounty Board]";
+		mes "You are ready to collect your bounty.";
+		mes "Which bounty do you want to collect?";
+		next;
+		switch(select("Collect 1 bounty:Collect ALL bounties:Cancel")){
+		case 1:
+			mes "[Bounty Board]";
+			mes "You will recieve additional ^ff000010 Merit Badge if all bounties are collected together.^000000";
+			mes "Otherwise, Reward item, Zeny and EXP/JEXP are rewarded alone.";
+			mes "^ff0000VIP accounts get to choose how to distribute experience prizes^000000.";
+			next;
+			switch(select("Ferus (Green):Ferus (Red):Acidus (Blue):Acidus (Gold):Dragon Egg:Hydrolancer:[^ff0000MVP^000000] Detardeurus:Cancel")){
+			case 1:
+				if(questprogress(20000,HUNTING) == 0){
+					mes "[Bounty Board]";
+					mes "You do not have Green Ferus mission in your quest log.";
+					close;
+				}
+				if(questprogress(20000,HUNTING) == 1){
+					mes "[Bounty Board]";
+					mes "The bounty to hunt Green Ferus has not been completed.";
+					close;
+				}
+				Zeny += 35000;
+				getitem Merit_Badge,1;
+				completequest 20000;
+				close;
+			case 2:
+				close;
+			case 3:
+				close;
+			case 4:
+				close;
+			case 5:
+				close;
+			case 6:
+				close;
+			case 7:
+				if(questprogress(20007,HUNTING) == 0){
+					mes "[Bounty Board]";
+					mes "You do not have Green Ferus mission in your quest log.";
+					close;
+				}
+				if(questprogress(20007,HUNTING) == 1){
+					mes "[Bounty Board]";
+					mes "The bounty to hunt Green Ferus has not been completed.";
+					close;
+				}
+				Zeny += 250000;
+				getitem Merit_Badge,5;
+				completequest 20007;
+				setquest 20008;
+				close;
+			case 8:
+				close;
+			}
+		case 2:
+			close;
+		case 3:
+			close;
+		}
+	case 3:
+		mes "[Bounty Board]";
+		mes "I'll check what mission that you've taken so far.";
+		mes "Which ones do you want to quit?";
+		next;
+		if(questprogress(20000,HUNTING) == 1){
+			mes "[Bounty Board]";
+			mes "You have NOT completed the Green Ferus hunt mission.";
+			mes "Do you want to continue or quit?";
+			next;
+			if(select("Keep hunting Green Ferus:^ff0000Get rid of my quest") == 2){
+				erasequest 20000;
+				mes "[Bounty Board]";
+				mes "All of your records for this quest have been deleted.";
+				close2;
+				showevent QTYPE_QUEST;
+			}
+		}
+		if(questprogress(20001,HUNTING) == 1){
+			mes "[Bounty Board]";
+			mes "You have NOT completed the Red Ferus hunt mission.";
+			mes "Do you want to continue or quit?";
+			next;
+			if(select("Keep hunting Red Ferus:^ff0000Get rid of my quest^000000") == 2){
+				erasequest 20001;
+				mes "[Bounty Board]";
+				mes "All of your records for this quest have been deleted.";
+				close2;
+				showevent QTYPE_QUEST;
+			}
+		}
+		close;
+	case 4:
+		mes "[Bounty Board]";
+		mes "Life is full of dangers.";
+		mes "You don't live life unless you put yourself in danger from time to time.";
+		close;
+	}
+OnInit:
+	questinfo 20000|20001|20007, QTYPE_QUEST, 0;
+	end;
+}

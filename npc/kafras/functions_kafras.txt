@@ -293,13 +293,27 @@ function	script	F_KafStor	{
 			mes "your Storage for you.";
 			mes "Thank you for using";
 			mes "the Kafra Service.";
+			mes "^ff0000***Sub-storage 2 is available with VIP membership ONLY. Third sub-storage can be accessed with Kafra Cards.***^000000";
+			next;
+			if(#VIP == 1){
+				menu "Open ^0000ffMain Storage^000000.",main_storage,"Open ^ff0000VIP Storage^000000.",vip_storage;
+			} else {
+				menu "Open ^0000ffMain Storage^000000.",main_storage;
+			}
 		}
 	}
+main_storage:
 	callfunc("F_CheckKafCode"); //check your storage password, if set
 	close2;
 	openstorage;
 	cutin "", 255;
 	end;
+vip_storage:
+	callfunc("F_CheckKafCode"); //check your storage password, if set
+	close2;
+	//openstorage; // WIP Src of Storage #2
+	cutin "", 255;
+	end;	
 }
 
 //===================================================

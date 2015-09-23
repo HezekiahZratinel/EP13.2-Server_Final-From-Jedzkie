@@ -47,7 +47,7 @@
 // 20120307 - 2012-03-07aRagexeRE+ - 0x970
 
 #ifndef PACKETVER
-	#define PACKETVER 20100730
+	#define PACKETVER 20100616
 #endif // PACKETVER
 
 //Uncomment the following line if your client is ragexeRE instead of ragexe (required because of conflicting packets in ragexe vs ragexeRE).
@@ -113,9 +113,9 @@
 #define DEFAULT_WALK_SPEED 150
 #define MIN_WALK_SPEED 20 /* below 20 clips animation */
 #define MAX_WALK_SPEED 1000
-#define MAX_STORAGE 300
-#define MAX_GUILD_STORAGE 300
-#define MAX_PARTY 24
+#define MAX_STORAGE 600
+#define MAX_GUILD_STORAGE 600
+#define MAX_PARTY 12
 #define BASE_GUILD_SIZE 4                // Base guild members (without GD_EXTENSION)
 #define MAX_GUILD (BASE_GUILD_SIZE + 10 * 2) // Increased max guild members +6 per 1 extension levels [Lupus]
 #define MAX_GUILDPOSITION 20             // Increased max guild positions to accomodate for all members [Valaris] (removed) [PoW]

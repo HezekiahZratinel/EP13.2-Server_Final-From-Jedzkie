@@ -1,0 +1,23 @@
+-	trader	ToolDealer	-1,{
+
+OnInit:
+	sellitem Arrow;
+	sellitem Silver_Arrow;
+	sellitem Fire_Arrow;
+	sellitem Wing_Of_Fly;
+	sellitem Wing_Of_Butterfly;
+	sellitem Spectacles;
+	sellitem Red_Potion;
+	sellitem Orange_Potion;
+	sellitem Yellow_Potion;
+	sellitem White_Potion;
+	sellitem Blue_Potion;
+	sellitem Green_Potion;
+	sellitem Center_Potion;
+	sellitem Awakening_Potion;
+	sellitem Berserk_Potion;
+	sellitem Booby_Trap;
+	end;
+}
+
+prontera,164,89,4	duplicate(ToolDealer)	Tool Dealer#new_prt	4_M_ROGUE

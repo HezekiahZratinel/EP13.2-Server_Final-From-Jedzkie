@@ -1027,7 +1027,7 @@ ACMD(jobchange) {
 	}
 
 	if (pc->db_checkid(job)) {
-		if ( job & JOBL_UPPER || upper == 1 ) {
+		if ( pc->jobid2mapid(job) & JOBL_THIRD ) {
 			clif->message(fd, msg_txt(155)); // You are unable to change your job.
 			return false;
 		}
@@ -1783,7 +1783,7 @@ ACMD(go) {
 		int x, y;
 		int min_match; ///< Minimum string length to match
 	} data[] = {
-		{ MAP_PRONTERA,    116,  72, 3 }, //  0 = Prontera
+		{ MAP_PRONTERA,    156,  91, 3 }, //  0 = Prontera
 		{ MAP_MORROC,      156,  46, 4 }, //  1 = Morroc
 		{ MAP_GEFFEN,      120,  39, 3 }, //  2 = Geffen
 		{ MAP_PAYON,       161,  58, 3 }, //  3 = Payon
@@ -1797,7 +1797,7 @@ ACMD(go) {
 		{ MAP_LUTIE,       147, 134, 3 }, //  7 = Lutie
 		{ MAP_COMODO,      209, 143, 3 }, //  8 = Comodo
 		{ MAP_YUNO,        157, 125, 3 }, //  9 = Juno
-		{ MAP_AMATSU,      198,  84, 3 }, // 10 = Amatsu
+		{ MAP_AMATSU,      114, 141, 3 }, // 10 = Amatsu
 		{ MAP_GONRYUN,     160, 120, 3 }, // 11 = Kunlun
 		{ MAP_UMBALA,      100, 154, 3 }, // 12 = Umbala
 		{ MAP_NIFLHEIM,     21, 153, 3 }, // 13 = Niflheim

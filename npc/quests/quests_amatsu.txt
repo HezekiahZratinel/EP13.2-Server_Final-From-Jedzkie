@@ -1737,20 +1737,11 @@ ama_in02,115,177,7	script	Soldier#ama10	8_M_JPNSOLDIER,{
 	close;
 }
 
-ama_dun01,229,7,0	script	Soldier#ama11	8_M_JPNSOLDIER,{
-	mes "[Jyuro]";
-	mes "Do you want to go back?";
-	next;
-	if (select("Yes, I do:I will stay here") == 1) {
-		mes "[Jyuro]";
-		mes "Take care of yourself.";
-		close2;
-		warp "ama_in02",119,181;
-		end;
-	}
-	mes "[Jyuro]";
-	mes "Take care...";
-	close;
+ama_dun01,229,6,0	script	#amatsu_dun	WARPNPC,1,1,{
+
+OnTouch:
+	warp "ama_in02",119,181;
+	end;
 }
 
 ama_in02,200,176,4	script	Lord of Palace#ama	8_M_JPNMASTER,{

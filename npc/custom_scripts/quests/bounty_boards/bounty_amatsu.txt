@@ -1,0 +1,1 @@
+ama_dun01,233,14,2	script	Bounty Boards#ama_dun	2_BULLETIN_BOARD,{	end;	OnInit:	questinfo 20010, QTYPE_QUEST, 0;	end;}

@@ -17730,9 +17730,9 @@ void clif_show_modifiers (struct map_session_data *sd) {
 	if( sd->status.mod_exp != 100 || sd->status.mod_drop != 100 || sd->status.mod_death != 100 ) {
 		char output[128];
 
-		snprintf(output,128,"VIP Bonus: EXP/JEXP + 50%%, Death Penalty - 50%%, Item Drop + 50%%",
+		snprintf(output,128,"VIP Bonus: EXP/JEXP + 50%%, Death Penalty - 67%%, Item Drop + 50%%",
 				sd->status.mod_exp,sd->status.mod_drop,sd->status.mod_death);
-		clif->broadcast2(&sd->bl,output, strlen(output) + 1, 0xffbc90, 0x190, 12, 0, 0, SELF);
+		clif->broadcast2(&sd->bl, output, strlen(output) + 1, 0xffbc90, 0x190, 12, 0, 0, SELF);
 	}
 
 }
@@ -17741,9 +17741,9 @@ void clif_notify_bounditem(struct map_session_data *sd, unsigned short index) {
 	struct packet_notify_bounditem p;
 
 	p.PacketType = notify_bounditemType;
-	p.index = index+2;
+	p.index = index + 2;
 
-	clif->send(&p,sizeof(p), &sd->bl, SELF);
+	clif->send(&p, sizeof(p), &sd->bl, SELF);
 }
 
 /**
